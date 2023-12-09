@@ -2,7 +2,6 @@ const data = require('./dataProvider.js');
 const paintings = data.paintings;
 const galleries = data.galleries;
 const artists = data.artists;
-const api = 'localhost:8080';
 
 const handleAllPaintings = (app) => {
     app.get("/api/paintings", (req, res) => {
@@ -76,14 +75,14 @@ const handleByColor = (app) => { //look into how to do this one
     app.get("/api/painting/color/:name", (req, res) => {
         const name = req.params.name.toLowerCase();
         const matches = paintings.filter(p => 
-            p.dominantColors.some(c =>
-                color.name.toLowerCase().includes(name)
+            p.details.annotation.dominantColors.some(c =>
+                c.name.toLowerCase() == name
             )
         );
         if (matches && matches.length > 0) {
             res.json(matches);
         } else {
-            res.status(404).send(`No paintings found with color ${color}`);
+            res.status(404).send(`No paintings found with color ${name}`);
         }
     });
 };
